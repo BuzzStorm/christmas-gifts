@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Christmas Gift List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@400;500;600&display=swap');
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 50%, #8b4513 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: #ffd700;
+            font-size: 1.1em;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        input[type="text"] {
+            padding: 12px 20px;
+            border: 2px solid #d4af37;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1em;
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+            max-width: 250px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #d4af37;
+            color: #1a472a;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: #f0d860;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .family-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        .family-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .family-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(135deg, transparent 30%, rgba(212, 175, 55, 0.1) 50%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            pointer-events: none;
+        }
+
+        .family-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .family-card:hover::before {
+            animation: shimmer 0.6s ease-out;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .person-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em;
+            color: #1a472a;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .delete-person {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        .delete-person:hover {
+            background: #ff5252;
+            transform: scale(1.1);
+        }
+
+        .gift-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .gift-input-container input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        .gift-input-container input:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+        }
+
+        .gift-input-container button {
+            padding: 10px 20px;
+            background: #1a472a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .gift-input-container button:hover {
+            background: #2d5a3d;
+            transform: translateY(-2px);
+        }
+
+        .gifts-list {
+            position: relative;
+            z-index: 1;
+        }
+
+        .gift-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .gift-item:hover {
+            background: #f0f0f0;
+            padding-left: 16px;
+        }
+
+        .gift-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #d4af37;
+        }
+
+        .gift-text {
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .gift-item input[type="checkbox"]:checked ~ .gift-text {
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .delete-gift {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .delete-gift:hover {
+            background: #ff5252;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes shimmer {
+            from {
+                transform: translateX(-200%) translateY(-200%) rotate(45deg);
+            }
+            to {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .family-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            input[type="text"] {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎁 Family Christmas Gifts</h1>
+            <p class="subtitle">Plan the perfect presents for everyone</p>
+        </header>
+
+        <div class="controls">
+            <input
+                type="text"
+                id="personInput"
+                placeholder="Add family member name..."
+                autocomplete="off"
+            >
+            <button onclick="addPerson()">Add Person</button>
+        </div>
+
+        <div id="familyContainer" class="family-grid"></div>
+        <div id="emptyState" class="empty-state">
+            Add a family member to get started! 🎄
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1RjD8SNPUwfhIqg0UEkHRkHXIKCjwYR4",
+            authDomain: "xmas-gifts-bd4a9.firebaseapp.com",
+            projectId: "xmas-gifts-bd4a9",
+            databaseURL: "https://xmas-gifts-bd4a9.firebaseio.com",
+            appId: "1:460978732810:web:2080e3bcbf1480062484f3"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        let listId = null;
+        let currentUserId = null;
+
+        // Get or create list ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        listId = urlParams.get('list') || 'default-list-' + Math.random().toString(36).substring(7);
+
+        if (!urlParams.get('list')) {
+            // Update URL with list ID without reloading
+            window.history.replaceState({}, document.title, window.location.pathname + '?list=' + listId);
+            // Show share link
+            setTimeout(showShareLink, 500);
+        }
+
+        function showShareLink() {
+            const shareUrl = window.location.href;
+            console.log('Share this link with your wife:', shareUrl);
+            const banner = document.createElement('div');
+            banner.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #d4af37;
+                color: #1a472a;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                font-weight: 600;
+                z-index: 1000;
+                max-width: 400px;
+                cursor: pointer;
+            `;
+            banner.innerHTML = `
+                <div style="margin-bottom: 10px;">📋 Share this link with your wife:</div>
+                <input type="text" value="${shareUrl}" readonly style="width: 100%; padding: 8px; border: none; border-radius: 4px; font-family: monospace; font-size: 0.85em; cursor: pointer;" onclick="this.select()">
+                <div style="margin-top: 8px; font-size: 0.9em; opacity: 0.8;">Click to copy</div>
+            `;
+            document.body.appendChild(banner);
+            setTimeout(() => banner.style.opacity = '0.8', 3000);
+        }
+
+        // Authenticate anonymously
+        auth.signInAnonymously().then(() => {
+            currentUserId = auth.currentUser.uid;
+            listenToData();
+        }).catch(err => console.error('Auth error:', err));
+
+        let state = {
+            families: []
+        };
+
+        function listenToData() {
+            const ref = database.ref('lists/' + listId + '/families');
+            ref.on('value', (snapshot) => {
+                state.families = [];
+                const data = snapshot.val();
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        state.families.push({
+                            ...data[key],
+                            dbKey: key
+                        });
+                    });
+                }
+                state.families.sort((a, b) => a.timestamp - b.timestamp);
+                render();
+            });
+        }
+
+        function addPerson() {
+            const input = document.getElementById('personInput');
+            const name = input.value.trim();
+
+            if (!name) return;
+
+            const newPerson = {
+                id: Date.now(),
+                name: name,
+                gifts: [],
+                timestamp: Date.now()
+            };
+
+            const ref = database.ref('lists/' + listId + '/families').push();
+            ref.set(newPerson);
+
+            input.value = '';
+        }
+
+        function deletePerson(dbKey) {
+            database.ref('lists/' + listId + '/families/' + dbKey).remove();
+        }
+
+        function addGift(personDbKey, personId) {
+            const input = document.querySelector(`#giftInput${personId}`);
+            const gift = input.value.trim();
+
+            if (!gift) return;
+
+            const person = state.families.find(f => f.id === personId);
+            const updatedGifts = person.gifts || [];
+            updatedGifts.push({
+                id: Date.now(),
+                text: gift,
+                completed: false
+            });
+
+            database.ref('lists/' + listId + '/families/' + personDbKey + '/gifts').set(updatedGifts);
+            input.value = '';
+        }
+
+        function toggleGift(personDbKey, personId, giftId) {
+            const person = state.families.find(f => f.id === personId);
+            const gift = person.gifts.find(g => g.id === giftId);
+            gift.completed = !gift.completed;
+
+            database.ref('lists/' + listId + '/families/' + personDbKey + '/gifts').set(person.gifts);
+        }
+
+        function deleteGift(personDbKey, personId, giftId) {
+            const person = state.families.find(f => f.id === personId);
+            const updatedGifts = person.gifts.filter(g => g.id !== giftId);
+
+            database.ref('lists/' + listId + '/families/' + personDbKey + '/gifts').set(updatedGifts);
+        }
+
+        function handleKeyPress(event, personId) {
+            if (event.key === 'Enter') {
+                const person = state.families.find(f => f.id === personId);
+                addGift(person.dbKey, personId);
+            }
+        }
+
+        function render() {
+            const container = document.getElementById('familyContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (state.families.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            container.innerHTML = state.families.map(family => `
+                <div class="family-card">
+                    <div class="card-header">
+                        <h2 class="person-name">
+                            ${family.name}
+                        </h2>
+                        <button class="delete-person" onclick="deletePerson('${family.dbKey}')" title="Remove person">×</button>
+                    </div>
+
+                    <div class="gift-input-container">
+                        <input
+                            type="text"
+                            id="giftInput${family.id}"
+                            placeholder="Add a gift idea..."
+                            onkeypress="handleKeyPress(event, ${family.id})"
+                        >
+                        <button onclick="addGift('${family.dbKey}', ${family.id})">Add</button>
+                    </div>
+
+                    <div class="gifts-list">
+                        ${!family.gifts || family.gifts.length === 0 ?
+                            '<div style="color: #999; padding: 20px; text-align: center;">No gifts yet ✨</div>' :
+                            family.gifts.map(gift => `
+                                <div class="gift-item">
+                                    <input
+                                        type="checkbox"
+                                        ${gift.completed ? 'checked' : ''}
+                                        onchange="toggleGift('${family.dbKey}', ${family.id}, ${gift.id})"
+                                    >
+                                    <span class="gift-text">${gift.text}</span>
+                                    <button class="delete-gift" onclick="deleteGift('${family.dbKey}', ${family.id}, ${gift.id})">Delete</button>
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('personInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addPerson();
+            }
+        });
+    </script>
+</body>
+</html>
